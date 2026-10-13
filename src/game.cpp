@@ -4,9 +4,12 @@
 #include "../include/bank.h"
 #include "../include/backpack.h"
 #include "../include/random.h"
+#include "../include/json.hpp"
+#include <curl/curl.h>
 #include <fstream>
 #include <unistd.h>
 #include <cstdio>
+
 int Game::work() {
     int a = random(400,600);
     std::cout << "工作中···" << std::endl;
@@ -89,33 +92,30 @@ void Game::nextDay() {
     randomEvent();
 }
 bool Game::sendVersion() {
-    std::string cmd = "curl -s --max-time 5 \"" + SERVER_API + "/version.php\"";
-    std::string versionStr;
-    char buffer[128];
-    FILE* pipe = popen(cmd.c_str(), "r");
-    if (!pipe) return false;
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
-        versionStr += buffer;
-    }
-    pclose(pipe);
-    if (!versionStr.empty()) {
-        size_t end = versionStr.find_last_not_of("\n\r");
-        if (end != std::string::npos) {
-            versionStr.erase(end + 1);
-        } else {
-            versionStr.clear();
-        }
-    }
-    size_t pos = versionStr.find(' ');
-    if (pos == std::string::npos) return false;
-    
-    std::string webPrefix = versionStr.substr(0, pos);
-    std::string webNumStr = versionStr.substr(pos + 1);
-    
-    if (VERSION_PREFIX != webPrefix || VERSION_NUM != webNumStr) {
-        return true;
-    }
-    return false;
+    CURL* curl = curl_easy_init();
+    if (!curl) return false;
+
+    std::string body;
+    curl_easy_setopt(curl, CURLOPT_URL, SERVER_API.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
+        +[](void* data, size_t size, size_t nmemb, void* userp) -> size_t {
+            auto* out = static_cast<std::string*>(userp);
+            out->append(static_cast<char*>(data), size * nmemb);
+            return size * nmemb;
+        });
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &body);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+    CURLcode res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK) return false;
+
+    while (!body.empty() && (body.back() == '\n' || body.back() == '\r'))
+        body.pop_back();
+
+    return body != VERSION_DISPLAY;
 }
 void Game::randomEvent() {
     int ra = random(1,100);
@@ -178,8 +178,32 @@ void Game::randomEvent() {
         }
     }
 }
+
+using json = nlohmann::json;
+
 void Game::saveGame() {
-    std::ofstream file("saveGame.txt");
+    json j;
+    json bag = json::object();
+    
+    j["Money"] = player.getMoney();
+    j["days"] = player.getDays();
+    j["hp"] = player.getHp();
+    j["hunger"] = player.getHunger();
+    j["thirst"] = player.getThirst();
+    j["lotteryCd"] = lotteryCd;
+    j["balance"] = bank.getBalance();
+    j["mood"] = player.getMood();
+    
+    for (const auto& item : backpack.getAllItems()) {
+        bag[item.first] = item.second;
+    }
+    j["backpack"] = bag;
+    
+    std::ofstream f("saveGame.json");
+    f << j.dump(4);
+    f.close();
+    
+/*    std::ofstream file("saveGame.txt");
     if(!file) {
         std::cout << "保存失败" << std::endl;
         return;
@@ -195,12 +219,45 @@ void Game::saveGame() {
     for (const auto& item : backpack.getAllItems()) {
         file << item.first << " " << item.second << "\n";
     }
-    file.close();
+    file.close();*///让我试试这个库好不好使
     std::cout << "游戏已保存！" << std::endl;
 }
 void Game::loadGame() {
-    std::ifstream file("saveGame.txt");
-    if(!file)
+    json j;
+    
+    std::ifstream file("saveGame.json");
+    
+    if(!file) {
+        std::cout << "未发现存档" << std::endl;
+        return;
+    }
+    
+    try {
+        file >> j;
+    } catch(...) {
+        std::cout << "存档读取失败，该存档无法使用-_-" << std::endl;
+        return;
+    }
+    
+    player.setMoney(j.value("Money", 0));
+    player.setDays(j.value("days", 0));
+    player.setHp(j.value("hp", 100));
+    player.setHunger(j.value("hunger", 100));
+    player.setThirst(j.value("thirst", 100));
+    lotteryCd = j.value("lotteryCd", false);
+    bank.setBalance(j.value("balance", 0));
+    player.setMood(j.value("mood", 100));
+    
+    backpack.clear();
+    if(j.contains("backpack") && j["backpack"].is_object()) {
+        for (auto& [name, count] : j["backpack"].items()) {
+            backpack.addItem(name, count.get<int>());
+        }
+    }
+    
+    j["version"] = VERSION_DISPLAY;
+    
+    /*if(!file)
     {
         std::cout << "未发现存档" << std::endl;
         return;
@@ -223,7 +280,7 @@ void Game::loadGame() {
     int count;
     while (file >> name >> count) {
         backpack.addItem(name, count);
-    }
+    }*/
     file.close();
     std::cout << "读取存档成功！" << std::endl;
 }

@@ -1,1 +1,5 @@
 game
+*.o
+*.d
+build/
+saveGame.json

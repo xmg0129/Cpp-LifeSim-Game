@@ -6,11 +6,11 @@
 
 ## 特别提醒
 
-- 目前仅支持Linux、Android(Termux)、MacOS等环境，暂未适配 Windows
+- 目前仅支持Linux、Android(Termux)、MacOS等环境，暂未适配Windows
 
 ## 当前版本
 
-- Alpha 0.21
+- Alpha 0.22
 
 ## 游戏功能
 
@@ -30,19 +30,19 @@
 #### Android(Termux)环境安装命令:
 
 ```bash
-pkg install g++ curl git
+pkg install g++ curl git make
 ```
 
-#### Linux环境安装命令:
+#### Linux环境安装命令(apt包管理为例):
 
 ```bash
-sudo apt install g++ curl git
+sudo apt install g++ curl git make
 ```
 
 #### MacOS环境安装命令:
 
 ```bash
-brew install curl git
+brew install curl git make
 xcode-select --install
 ```
 ### 克隆仓库
@@ -56,13 +56,13 @@ cd Cpp-LifeSim-Game
 #### Linux、Android(Termux)环境编译命令:
 
 ```bash
-g++ -std=c++11 -Iinclude src/*.cpp -o game -pthread -lcurl
+make run CXX=g++ CFLAGS=-std=c++17 -j$(nproc)
 ```
 
 #### MacOS环境编译命令:
 
 ```bash
-clang++ -std=c++11 -Iinclude src/*.cpp -o game -pthread -lcurl
+make run CXX=clang++ CFLAGS=-std=c++17 -j$(sysctl -n hw.ncpu)
 ```
 
 ## 运行命令：
@@ -70,5 +70,7 @@ clang++ -std=c++11 -Iinclude src/*.cpp -o game -pthread -lcurl
 ```bash
 ./game
 ```
+
+##
 
 注：本项目开发过程中使用了 AI 工具辅助部分代码编写。
