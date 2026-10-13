@@ -25,7 +25,7 @@
 
 ## 快速开始
 
-### 如未安装g++ curl git请先安装:
+### 如未安装g++ curl git make请先安装:
 
 #### Android(Termux)环境安装命令:
 
@@ -46,6 +46,7 @@ brew install curl git make
 xcode-select --install
 ```
 ### 克隆仓库
+
 ```bash
 git clone https://github.com/xmg0129/Cpp-LifeSim-Game.git
 cd Cpp-LifeSim-Game
@@ -67,10 +68,12 @@ make run CXX=clang++ CFLAGS=-std=c++17 -j$(sysctl -n hw.ncpu)
 
 ## 运行命令：
 
+- 需要在“Cpp-LifeSim-Game”目录下执行
+
 ```bash
-./game
+make run
 ```
 
 ##
 
-注：本项目开发过程中使用了 AI 工具辅助部分代码编写。
+注：本项目开发过程中使用了AI辅助部分代码编写。
