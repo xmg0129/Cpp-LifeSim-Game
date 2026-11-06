@@ -15,7 +15,7 @@ bool menu(Game& game);
 const std::string VERSION_PREFIX = "Alpha";
 const std::string VERSION_NUM = "24";
 const std::string VERSION_DISPLAY = "Alpha 0.24";
-const std::string SERVER_API = "https://github.com/xmg0129/Cpp-LifeSim-Game/version.txt";
+const std::string SERVER_API = "https://raw.githubusercontent.com/xmg0129/Cpp-LifeSim-Game/main/version.txt";
 const std::string SERVER = "https://github.com/xmg0129/Cpp-LifeSim-Game";
 
 #endif
