@@ -15,6 +15,7 @@ void Bank::deposit(double amount,Player& player) {
     balance += amount;
     std::cout << "存款成功" << std::endl;
 }
+
 void Bank::withdraw(double amount,Player& player) {
     if(amount <= 0) {
         std::cout << "金额错误取款失败" << std::endl;
@@ -28,15 +29,19 @@ void Bank::withdraw(double amount,Player& player) {
     balance -= amount;
     std::cout << "取款成功" << std::endl;
 }
+
 void Bank::checkBalance() {
     std::cout << "当前余额为:" << balance << std::endl;
 }
+
 void Bank::dailyInterest() {
     balance += balance * interestRate;
 }
+
 double Bank::getBalance() {
     return balance;
 }
+
 void Bank::setBalance(double amount) {
     balance = amount;
 }

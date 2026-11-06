@@ -61,7 +61,7 @@ bool menu(Game& game) {
         {
             std::cout << "第" << game.player.getDays() << "天结束了" << std::endl;
             if(game.player.getMood() == 0 && randomBool()) {
-                std::cout << "你心情极差，由于在过马路的时候没注意到有车经过，导致被撞伤了由于你在过马路的时候闯了红灯导致你全责，";
+                std::cout << "你心情极差，由于在过马路的时候没注意到有车经过，导致被撞伤了由于你在过马路的时候闯了红灯导致你全责。";
                 if(game.player.getMoney() >= 15000) {
                     std::cout << "扣除15000元人民币" << std::endl;
                     game.player.spendMoney(15000);
@@ -96,12 +96,25 @@ bool menu(Game& game) {
                 std::cout << "由于口渴值不足30所以扣除血量50" << std::endl;
                 game.player.spendHp(50);
             }
+            
+            if(game.player.getMoney() >= 200) {
+                std::cout << "房租 - 200元/日" << std::endl;
+                game.player.spendMoney(200);
+                
+            } else {
+                std::cout << "由于没钱交房租，所以被房东赶了出去外面天寒地冻血量扣除20心情扣除35" << std::endl;
+                game.player.spendHp(20);
+                game.player.spendMood(35);
+                
+            }
+            
             game.bank.dailyInterest();
             game.player.earnDays();
             game.player.earnMood(3);
             game.nextDay();
             sleep(1);
         }
+        
         else if(input == "7")
         {
             if(!game.getLotteryCd())
@@ -174,7 +187,7 @@ bool menu(Game& game) {
         {
             return false;
         }
-
+        
     }
     while(running);
     return false;

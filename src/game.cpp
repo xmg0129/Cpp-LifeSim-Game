@@ -37,6 +37,7 @@ int Game::work() {
     }
     player.spendMood(7);
     return a;
+    
 }
 
 void Game::familyResult(std::string m,int z) {
@@ -48,11 +49,13 @@ void Game::familyResult(std::string m,int z) {
             << "很快你成年了家里给了你一笔钱" << std::endl
             << "总共:" << z << "元人民币" << std::endl << std::endl;
     player.earnMoney(z);
-
+    
 }
+
 bool Game::getLotteryCd() {
     return lotteryCd;
 }
+
 void Game::randomFamily() {
     int a = random(1,100);
     int n1 = 15;
@@ -60,6 +63,7 @@ void Game::randomFamily() {
     int n3 = 85;
     int z1;
     std::string m1;
+    
     if (a <= n1)
     {
         m1 = "贫穷";
@@ -84,17 +88,18 @@ void Game::randomFamily() {
         z1 = random(4000,5000);
         familyResult(m1,z1);
     }
-
-
+    
+    
 }
 void Game::nextDay() {
     lotteryCd = false;
     randomEvent();
 }
+
 bool Game::sendVersion() {
     CURL* curl = curl_easy_init();
     if (!curl) return false;
-
+    
     std::string body;
     curl_easy_setopt(curl, CURLOPT_URL, SERVER_API.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
@@ -106,17 +111,18 @@ bool Game::sendVersion() {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &body);
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
+    
     CURLcode res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
-
+    
     if (res != CURLE_OK) return false;
-
+    
     while (!body.empty() && (body.back() == '\n' || body.back() == '\r'))
         body.pop_back();
-
+        
     return body != VERSION_DISPLAY;
 }
+
 void Game::randomEvent() {
     int ra = random(1,100);
     if(ra == 1)
@@ -177,6 +183,7 @@ void Game::randomEvent() {
                   break;
         }
     }
+    
 }
 
 using json = nlohmann::json;
@@ -222,6 +229,7 @@ void Game::saveGame() {
     file.close();*///让我试试这个库好不好使
     std::cout << "游戏已保存！" << std::endl;
 }
+
 void Game::loadGame() {
     json j;
     
@@ -283,6 +291,7 @@ void Game::loadGame() {
     }*/
     file.close();
     std::cout << "读取存档成功！" << std::endl;
+    
 }
 
 void Game::lottery()
@@ -360,7 +369,7 @@ void Game::lottery()
         {
             std::cout << "错误请重新输入 "<< std::endl;
         }
-
+        
     }
-
+    
 }

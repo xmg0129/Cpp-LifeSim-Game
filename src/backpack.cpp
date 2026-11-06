@@ -13,6 +13,7 @@ void Backpack::clear() {
 void Backpack::addItem(const std::string& name, int count) {
     packet[name] = count;
 }
+
 Backpack::Backpack() {
     packet["手机"] = 0;
     packet["面包"] = 2;
@@ -72,6 +73,7 @@ void Backpack::buyMenu(Player& player) {
         std::cout << "6.牛肉干 40 元" << std::endl;
         std::cout << "7.水果 12 元" << std::endl;
         std::cout << "0.退出\n" << std::endl;
+        
         std::cin >> input;
         if(input == "1")
         {
@@ -113,7 +115,7 @@ void Backpack::buyMenu(Player& player) {
         }
     }
     while(a);
-
+    
 }
 
 void Backpack::buyItem(int price,std::string name,Player& player) {
@@ -131,7 +133,7 @@ void Backpack::buyItem(int price,std::string name,Player& player) {
     {
         std::cout << "余额不足!" << std::endl;
     }
-
+    
 }
 
 
@@ -151,7 +153,7 @@ bool Backpack::useItem(std::string name,Player& player) {
         }
         else if(name == "手机")
         {
-            std::cout << "你拿起手机打开游戏当打手带着老板千万撤离 hp - 5 Money + 300 心情 - 2" << std::endl;
+            std::cout << "你拿起手机打开游戏当打手带着老板千万撤离 hp - 5 Money + 300 心情 - 5" << std::endl;
             player.spendHp(5,true);
             player.earnMoney(200);
             player.spendMood(5);
