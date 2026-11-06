@@ -35,7 +35,7 @@ void Backpack::discard() {
         std::cout << "背包中没有" << name << std::endl;
     } else if (it->second < count) {
         std::cout << "数量不足！只有 " << it->second << " 个" << std::endl;
-    } else if (count。< 0) {
+    } else if (count < 0) {
         std::cout << "错误！请勿输入负数" << std::endl;
     } else {
         it->second -= count;
