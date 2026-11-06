@@ -1,5 +1,5 @@
 CXX      ?= g++
-CXXFLAGS ?= -std=c++17 -O2 -Wall -Iinclude
+CXXFLAGS ?= -std=c++17 -O3 -Wall -Iinclude
 LDFLAGS  ?=
 LDLIBS   ?= -pthread -lcurl
 

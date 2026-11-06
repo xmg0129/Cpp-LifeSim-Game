@@ -51,4 +51,5 @@ public:
     bool spendMoney(long long amount);
     void spendHp(int amount,bool easterEgg = false);
 };
+
 #endif

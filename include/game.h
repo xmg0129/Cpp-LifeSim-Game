@@ -4,6 +4,7 @@
 #include "player.h"
 #include "backpack.h"
 #include "bank.h"
+
 class Game {
 private:
     bool lotteryCd = false;
@@ -22,4 +23,5 @@ public:
     void loadGame();
     bool sendVersion();
 };
+
 #endif

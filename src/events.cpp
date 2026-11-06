@@ -2,6 +2,7 @@
 #include "../include/game.h"
 #include "../include/random.h"
 #include <unistd.h>
+
 bool menu(Game& game) {
     bool running = true;
     std::string input;

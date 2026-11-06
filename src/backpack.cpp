@@ -1,6 +1,7 @@
 #include "../include/common.h"
 #include "../include/backpack.h"
 #include "../include/player.h"
+
 const std::unordered_map<std::string, int>& Backpack::getAllItems() const {
     return packet;
 }
@@ -18,7 +19,7 @@ Backpack::Backpack() {
     packet["矿泉水"] = 2;
     packet["药品"] = 1;
     packet["饮料"] = 0;
-    packet["肉食"] = 0;
+    packet["牛肉干"] = 0;
     packet["水果"] = 5;
 }
 
@@ -34,6 +35,8 @@ void Backpack::discard() {
         std::cout << "背包中没有" << name << std::endl;
     } else if (it->second < count) {
         std::cout << "数量不足！只有 " << it->second << " 个" << std::endl;
+    } else if (count。< 0) {
+        std::cout << "错误！请勿输入负数" << std::endl;
     } else {
         it->second -= count;
         std::cout << "已丢出 " << count << " 个" << name << std::endl;
@@ -61,7 +64,7 @@ void Backpack::buyMenu(Player& player) {
     do {
         std::cout << "\n当前余额:" << player.getMoney() << "元人民币" << std::endl;
         std::cout << "请选择您要购买的物品:" << std::endl;
-        std::cout << "1.手机 1299 元" << std::endl;
+        std::cout << "1.手机 1399 元" << std::endl;
         std::cout << "2.面包 6 元" << std::endl;
         std::cout << "3.矿泉水 2 元" << std::endl;
         std::cout << "4.药品 35 元" << std::endl;
@@ -72,31 +75,31 @@ void Backpack::buyMenu(Player& player) {
         std::cin >> input;
         if(input == "1")
         {
-            buyItem(1000,"手机",player);
+            buyItem(1399,"手机",player);
         }
         else if(input == "2")
         {
-            buyItem(5,"面包",player);
+            buyItem(6,"面包",player);
         }
         else if(input == "3")
         {
-            buyItem(1,"矿泉水",player);
+            buyItem(2,"矿泉水",player);
         }
         else if(input == "4")
         {
-            buyItem(30,"药品",player);
+            buyItem(35,"药品",player);
         }
         else if(input == "5")
         {
-            buyItem(3,"饮料",player);
+            buyItem(4,"饮料",player);
         }
         else if(input == "6")
         {
-            buyItem(2,"肉食",player);
+            buyItem(40,"牛肉干",player);
         }
         else if(input == "7")
         {
-            buyItem(10,"水果",player);
+            buyItem(12,"水果",player);
         }
         else if(input == "0")
         {
@@ -148,9 +151,10 @@ bool Backpack::useItem(std::string name,Player& player) {
         }
         else if(name == "手机")
         {
-            std::cout << "你拿起手机打开游戏当打手带着老板千万撤离 hp - 5 Money + 300 心情 - 1" << std::endl;
+            std::cout << "你拿起手机打开游戏当打手带着老板千万撤离 hp - 5 Money + 300 心情 - 2" << std::endl;
             player.spendHp(5,true);
             player.earnMoney(200);
+            player.spendMood(5);
             if(player.getDead())
             {
                 return false;
@@ -174,9 +178,9 @@ bool Backpack::useItem(std::string name,Player& player) {
             packet[name] -= 1;
             player.earnThirst(40);
         }
-        else if(name == "肉食")
+        else if(name == "牛肉干")
         {
-            std::cout << "非常的好吃 饥饿值 + 50 肉食 - 1" << std::endl;
+            std::cout << "非常的好吃 饥饿值 + 50 牛肉干 - 1" << std::endl;
             packet[name] -= 1;
             player.earnHunger(50);
         }
@@ -207,7 +211,7 @@ void Backpack::useMenu(Player& player) {
         std::cout << "3.矿泉水" << std::endl;
         std::cout << "4.药品" << std::endl;
         std::cout << "5.饮料" << std::endl;
-        std::cout << "6.肉食" << std::endl;
+        std::cout << "6.牛肉干" << std::endl;
         std::cout << "7.水果" << std::endl;
         std::cout << "0.退出\n" << std::endl;
         std::cin >> input;
@@ -233,7 +237,7 @@ void Backpack::useMenu(Player& player) {
         }
         else if(input == "6")
         {
-            useItem("肉食",player);
+            useItem("牛肉干",player);
         }
         else if(input == "7")
         {

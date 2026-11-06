@@ -2,6 +2,7 @@
 #define BACKPACK_H
 #include "common.h"
 #include <unordered_map>
+
 class Backpack {
 private:
     std::unordered_map<std::string, int> packet;
@@ -17,4 +18,5 @@ public:
     void clear();
     void addItem(const std::string& name, int count);
 };
+
 #endif

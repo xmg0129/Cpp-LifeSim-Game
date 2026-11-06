@@ -1,6 +1,7 @@
 #ifndef BANK_H
 #define BANK_H
 #include "common.h"
+
 class Bank {
 private:
     double balance = 0.0;
@@ -13,4 +14,5 @@ public:
     double getBalance();
     void setBalance(double amount);
 };
+
 #endif

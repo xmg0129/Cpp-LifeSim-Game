@@ -1,5 +1,6 @@
 #include "../include/common.h"
 #include "../include/player.h"
+
 void Player::spendHp(int amount,bool easterEgg) {
     if(hp - amount <= minHp)
     {

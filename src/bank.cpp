@@ -1,6 +1,7 @@
 #include "../include/common.h"
 #include "../include/bank.h"
 #include "../include/player.h"
+
 void Bank::deposit(double amount,Player& player) {
     if(amount <= 0) {
         std::cout << "金额错误存款失败" << std::endl;
